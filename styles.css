@@ -1,0 +1,55 @@
+*:not(title, head) {
+  display: flex;
+  flex-grow: 1;
+}
+
+span {
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  flex-grow: 0;
+  width: 60px;
+}
+
+#button-div {
+  gap: 5px;
+  margin: 10px 0;
+}
+
+#main-container {
+  flex-direction: column;
+  max-width: 600px;
+}
+
+#fade-adjust {
+  justify-content: center;
+  align-items: center;
+}
+
+#fade-inc,
+#fade-dec {
+  max-width: 20px;
+  justify-content: center;
+}
+
+#mode-toggle {
+  justify-content: center;
+  max-width: 150px;
+}
+
+#prompt {
+  justify-content: center;
+  align-items: center;
+  max-width: 150px;
+}
+
+
+#grid-container {
+  flex-direction: column;
+}
+
+.column {
+  aspect-ratio: 1/1;
+  border: 1px solid black;
+  border-width: 1px;
+}
