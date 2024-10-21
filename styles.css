@@ -3,6 +3,10 @@
   flex-grow: 1;
 }
 
+body {
+  justify-content: center;
+}
+
 span {
   justify-content: center;
   margin: 0;

@@ -38,10 +38,8 @@ const toggleMode = () => {
   } else {
     currentMode = "rainbow";
     fadeDuration = fadeRevert;
-    // console.log(document.querySelectorAll("#column"));
     document.getElementById("mode-toggle").textContent = "Color Trail Mode";
     document.querySelectorAll(".column").forEach((column) => {
-      console.log("meow");
       column.setAttribute("style", "background-color: ''");
     });
     document
@@ -67,7 +65,6 @@ const whichMode = (e) => {
 // before being able to repeat colors!
 let colors = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
 const rainbowEnter = (e) => {
-  console.log(e.type);
   // resets when all unique colors have been used in the last 7 hovers
   if (colors.length == 0) {
     colors = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
@@ -80,7 +77,6 @@ const rainbowEnter = (e) => {
 
 // mouse off does a fade
 const rainbowLeave = (e) => {
-  console.log(e.type);
   e.target.style.setProperty("transition", `all ${fadeDuration}s`);
   e.target.style.removeProperty(`background-color`, ``);
 };
@@ -96,15 +92,12 @@ const opacityEnter = (e) => {
   // band aid fix for fading side effect help ME GOD
   e.target.style.setProperty("transition", `all ${fadeDuration}s`);
 
-  console.log(opacity);
   // .match() from last comma to last paren, then convert to string
   opacity = opacity.match(/,\s\d?.?\d?\)$/);
-  console.log(opacity);
   opacity = opacity.join("");
   // .slice() take just the float/num value
   opacity = opacity.slice(2, opacity.length - 1); // for some reason slice has to be in the next line??
   opacity = String((Number(opacity) + 0.1).toFixed(1));
-  // console.log(opacity);
   e.target.style.setProperty("background", `rgba(0, 0, 0, ${opacity})`);
 };
 
