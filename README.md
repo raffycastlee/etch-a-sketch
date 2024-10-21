@@ -17,6 +17,12 @@ deployed [here](https://raffycastlee.github.io/odin-etch-a-sketch/). template/pr
 
 ## _screens_
 
-[demo](media/demo.mov)
+![demo-1](media/demo-1.png)
 
-<p align="center"><em>Demo</em></p>
+![demo-2](media/demo-2.png)
+
+![demo-3](media/demo-3.png)
+
+![demo-4](media/demo-4.png)
+
+![demo-5](media/demo-5.png)
