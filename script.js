@@ -4,25 +4,36 @@ const gridContainer = document.getElementById("grid-container");
 
 const getGridSpec = () => {
   let newN = Number(prompt("Enter new 'n' for n x n grid: "));
+  while (isNaN(newN) || newN <= 0) {
+    newN = Number(prompt("Enter new 'n' for n x n grid: "));
+  }
+
   gridContainer.replaceChildren(
     ...[...Array(newN)].map(() => {
       let row = document.createElement("div");
       row.classList.add("row");
-      row.replaceChildren(
-        ...[...Array(newN)].map(() => {
-          let column = document.createElement("div");
-          column.classList.add("column");
-          column.addEventListener("mouseenter", whichMode);
-          column.addEventListener("mouseleave", whichMode);
-          return column;
-        })
-      );
+      const children =  [...Array(newN)].map(() => {
+        let column = document.createElement("div");
+        column.classList.add("column");
+        column.addEventListener("mouseenter", whichMode);
+        column.addEventListener("mouseleave", whichMode);
+        return column;
+      })
+      console.log(children);
+      row.replaceChildren(...children);
       return row;
     })
   );
 };
 
+const resetGridColors = () => {
+  document.querySelectorAll(".column").forEach((column) => {
+    column.setAttribute("style", "background-color: ''");
+  });
+}
+
 let currentMode = "rainbow";
+let paintMode = "hover";
 let fadeDuration = 0.3;
 let fadeRevert = fadeDuration;
 // mode-toggle between random rainbow and progressive darkening!
@@ -42,24 +53,118 @@ const toggleMode = () => {
     document.querySelectorAll(".column").forEach((column) => {
       column.setAttribute("style", "background-color: ''");
     });
-    document
-      .getElementById("fade-adjust")
-      .setAttribute("style", "visibility: visible");
+    if (currentMode === 'rainbow' && paintMode === 'hover') {
+      document
+        .getElementById("fade-adjust")
+        .setAttribute("style", "visibility: visible");
+    }
   }
+  resetGridColors();
 };
 // return proper hover event based on mode!
 const whichMode = (e) => {
   if (currentMode == "rainbow") {
-    if (e.type == "mouseenter") {
-      return rainbowEnter(e);
+    switch (e.type) {
+      case 'mouseenter':
+        return rainbowEnter(e);
+      case 'mouseleave':
+        return rainbowLeave(e);
+      case 'click':
+        return rainbowEnter(e);
+      case 'mouseover':
+        return rainbowEnter(e);
     }
-    return rainbowLeave(e);
   } else {
-    if (e.type == "mouseenter") {
-      return opacityEnter(e);
+    switch (e.type) {
+      case 'mouseenter':
+        return opacityEnter(e);
+      case 'click':
+        return opacityEnter(e);
+      case 'mouseover':
+        return opacityEnter(e);
     }
   }
 };
+
+const startDrag = () => {
+  document.querySelectorAll(".row .column").forEach((column) => {
+    column.addEventListener('mouseover', whichMode);
+  });
+}
+
+const endDrag = () => {
+  document.querySelectorAll(".row .column").forEach((column) => {
+    column.removeEventListener('mouseover', whichMode);
+  });
+}
+
+// togglePaintMode
+const togglePaintMode = () => {
+  if (paintMode === 'hover') {
+    paintMode = 'click'
+    document.querySelectorAll(".row .column").forEach((column) => {
+      column.removeEventListener('mouseenter', whichMode);
+      column.removeEventListener('mouseleave', whichMode);
+    });
+
+    // for dragging across the grid
+    document
+      .querySelector('#grid-container')
+      .addEventListener('mousedown', startDrag);
+    document
+      .querySelector('#grid-container')
+      .addEventListener('mouseup', endDrag);
+
+    // for removing transition "slider"
+    document
+      .getElementById("fade-adjust")
+      .setAttribute("style", "visibility: hidden");
+
+    // for changing button
+    document
+      .querySelector("#paint-mode")
+      .textContent = 'Click Mode';
+  } else {
+    paintMode = 'hover';
+    document.querySelectorAll(".row .column").forEach((column) => {
+      column.addEventListener("mouseenter", whichMode);
+      column.addEventListener("mouseleave", whichMode);
+    });
+
+    // for dragging across the grid
+    document
+      .querySelector('#grid-container')
+      .removeEventListener('mousedown', startDrag);
+    document
+      .querySelector('#grid-container')
+      .removeEventListener('mouseup', endDrag);
+
+    // to make transition slider reappear
+    if (currentMode === 'rainbow' && paintMode === 'hover') {
+      document
+        .getElementById("fade-adjust")
+        .setAttribute("style", "visibility: visible");
+    }
+  
+    // for changing button text
+    document
+      .querySelector("#paint-mode")
+      .textContent = 'Hover Mode';
+  }
+  // resets all blocks
+  resetGridColors();
+}
+
+// const rainbowClick = (e) => {
+//   // resets when all unique colors have been used in the last 7 hovers
+//   if (colors.length == 0) {
+//     colors = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
+//   }
+//   // grabs and changes div color
+//   color = colors.splice(Math.random() * colors.length, 1);
+//   e.target.style.setProperty("transition", "0s");
+//   e.target.style.setProperty(`background-color`, `${color}`);
+// };
 
 // randomizes hover colors, but makes sure to cycle on each unique
 // before being able to repeat colors!
@@ -115,16 +220,23 @@ const fadeDec = () => {
 };
 
 // add mode toggle event listener
-document.getElementById("mode-toggle").addEventListener("click", toggleMode);
+document.querySelector('button#mode-toggle').addEventListener("click", toggleMode);
+// document.getElementById("mode-toggle").addEventListener("click", toggleMode);
 
 // add fade inc/dec button listeners
 document.getElementById("fade-inc").addEventListener("click", fadeInc);
 document.getElementById("fade-dec").addEventListener("click", fadeDec);
 
-// add hover event listeners
+// add color/darker mode button listeners
 document.querySelectorAll(".row .column").forEach((column) => {
   column.addEventListener("mouseenter", whichMode);
   column.addEventListener("mouseleave", whichMode);
 });
 
+// add hover/click button listeners
+document
+  .querySelector("#paint-mode")
+  .addEventListener('click', togglePaintMode);
+
 gridButton.addEventListener("click", getGridSpec);
+getGridSpec();

@@ -16,6 +16,7 @@ span {
 }
 
 #button-div {
+  justify-content: space-between;
   gap: 5px;
   margin: 10px 0;
 }
@@ -39,6 +40,10 @@ span {
 #mode-toggle {
   justify-content: center;
   max-width: 150px;
+}
+
+#paint-mode {
+  justify-content: center;
 }
 
 #prompt {
