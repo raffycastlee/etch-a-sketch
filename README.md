@@ -1,6 +1,6 @@
 # Etch-a-Sketch
 
-deployed [here](https://raffycastlee.github.io/odin-etch-a-sketch/). template/prompt from [the odin project's fullstack-js](https://www.theodinproject.com/paths/full-stack-javascript).
+template/prompt from [the odin project's fullstack-js](https://www.theodinproject.com/paths/full-stack-javascript).
 
 ## todo
 
